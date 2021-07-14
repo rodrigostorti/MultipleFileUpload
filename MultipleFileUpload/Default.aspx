@@ -14,7 +14,7 @@
 <body>
      <form id="form1" runat="server">   
         <div id="divFile">
-            <h3>Multiple File Upload in Asp.Net (C#)</h3>  
+            <h3>Upload de Multiplos Arquivos</h3>  
             
             <p>
                 <asp:FileUpload ID="fileUpload" multiple="true" runat="server" />   
@@ -34,7 +34,7 @@
     <script>
         $('#btUpload').click(function() { 
             if (fileUpload.value.length == 0) {    // CHECK IF FILE(S) SELECTED.
-                alert('No files selected.');        
+                alert('Nenhum arquivo selecionado.');        
                 return false; 
             } 
         });

@@ -17,66 +17,61 @@ public partial class _Default : System.Web.UI.Page
 
     protected void Upload_Files(object sender, EventArgs e)
     {
-        if (fileUpload.HasFile)     // CHECK IF ANY FILE HAS BEEN SELECTED.
+        if (fileUpload.HasFile)     // verifica se há arquivos selecionados
         {
             int iUploadedCnt = 0;
             int iFailedCnt = 0;
             HttpFileCollection hfc = Request.Files;
-            lblFileList.Text = "Select <b>" + hfc.Count + "</b> file(s)";
+            lblFileList.Text = "Selecionado <b>" + hfc.Count + "</b> arquivos(s)";
 
-            if (hfc.Count <= 10)    // 10 FILES RESTRICTION.
+            if (hfc.Count <= 10)    // limite de 10 arquivos
             {
                 for (int i = 0; i <= hfc.Count - 1; i++)
                 {
                     HttpPostedFile hpf = hfc[i];
                     if (hpf.ContentLength > 0)
                     {
-                        if (!File.Exists(Server.MapPath("CopyFiles\\") +
-                            Path.GetFileName(hpf.FileName)))
+                        if (!File.Exists(Server.MapPath("CopyFiles\\") + Path.GetFileName(hpf.FileName)))
                         {
-                            DirectoryInfo objDir =
-                                new DirectoryInfo(Server.MapPath("CopyFiles\\"));
+                            DirectoryInfo objDir =  new DirectoryInfo(Server.MapPath("CopyFiles\\"));
 
                             string sFileName = Path.GetFileName(hpf.FileName);
                             string sFileExt = Path.GetExtension(hpf.FileName);
 
-                            // CHECK FOR DUPLICATE FILES.
-                            FileInfo[] objFI =
-                                objDir.GetFiles(sFileName.Replace(sFileExt, "") + ".*");
+                            // verifica duplicações
+                            FileInfo[] objFI = objDir.GetFiles(sFileName.Replace(sFileExt, "") + ".*");
 
                             if (objFI.Length > 0)
                             {
-                                // CHECK IF FILE WITH THE SAME NAME EXISTS  (IGNORING THE EXTENTIONS).
+                                // verifica se há arquivos com o mesmo nome
                                 foreach (FileInfo file in objFI)
                                 {
                                     string sFileName1 = objFI[0].Name;
                                     string sFileExt1 = Path.GetExtension(objFI[0].Name);
 
-                                    if (sFileName1.Replace(sFileExt1, "") ==
-                                            sFileName.Replace(sFileExt, ""))
+                                    if (sFileName1.Replace(sFileExt1, "") ==   sFileName.Replace(sFileExt, ""))
                                     {
-                                        iFailedCnt += 1;        // NOT ALLOWING DUPLICATE.
+                                        iFailedCnt += 1;        // não aceita duplicações
                                         break;
                                     }
                                 }
                             }
                             else
                             {
-                                // SAVE THE FILE IN A FOLDER.
-                                hpf.SaveAs(Server.MapPath("CopyFiles\\") +
-                                    Path.GetFileName(hpf.FileName));
+                                // salvando arquivo  nas pasta 
+                                hpf.SaveAs(Server.MapPath("CopyFiles\\") +  Path.GetFileName(hpf.FileName));
                                 iUploadedCnt += 1;
                             }
                             }
                         }
                     }
-                    lblUploadStatus.Text = "<b>" + iUploadedCnt + "</b> file(s) Uploaded.";
+                    lblUploadStatus.Text = "<b>" + iUploadedCnt + "</b> arquivos(s) salvo.";
                                     lblFailedStatus.Text = "<b>" + iFailedCnt + 
-                                        "</b> duplicate file(s) could not be uploaded.";
+                                        "</b> arquivos duplicados não serão salvos.";
             }
-            else lblUploadStatus.Text = "Max. 10 files allowed.";
+            else lblUploadStatus.Text = "Max. 10 arquivos permitido.";
         }
-        else lblUploadStatus.Text = "No files selected.";
+        else lblUploadStatus.Text = "Nenhum arquivo selecionado.";
     }
 
 
